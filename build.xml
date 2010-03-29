@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project default="jar" name="geocaching" basedir=".">
+  <!-- -->
+  <property name="build.classes.dir" value="build/classes"/>
+  <property name="build.lib.dir" value="build/lib"/>
+  <property name="build.src.dir" value="build/src"/>
+  <property name="jar.name" value="geocaching.jar"/>
+  <property name="package.dir" value="com/dolphincafe/geocaching"/>
+  <property name="package.name" value="com.dolphincafe.geocaching"/>
+  <property name="lib.dir" value="./lib"/>
+
+  <!-- -->
+  <path id="classpath">
+    <pathelement location="${build.classes.dir}/"/>
+    <pathelement location="${build.lib.dir}/"/>
+  </path>
+
+  <!-- -->
+  <target name="versioning">
+    <buildnumber/>
+    <mkdir dir="${build.src.dir}"/>
+    <tstamp>
+      <format property="timestamp" pattern="MMddyyyykk"/>
+    </tstamp>
+    <copy todir="${build.src.dir}">
+      <fileset dir="./src">
+        <include name="**/*.java"/>
+      </fileset> 
+      <filterset>
+        <!--<filter token="TIMESTAMP" value="${timestamp}-${build.number}"/>-->
+        <filter token="TIMESTAMP" value="${timestamp}"/>
+      </filterset>
+    </copy>
+  </target>
+
+  <!-- -->
+  <target name="jar" depends="versioning">
+    <mkdir dir="${build.classes.dir}"/>
+    <javac srcdir="${build.src.dir}" destdir="${build.classes.dir}" classpathref="classpath" deprecation="true" debug="true">
+      <compilerarg value="-Xlint:unchecked"/>
+      <include name="${package.dir}/*.java"/>
+    </javac>
+
+    <copy todir="${build.classes.dir}/${package.dir}/icons">
+      <fileset dir="./src/${package.dir}/icons"/>
+    </copy>
+    <copy todir="${build.classes.dir}">
+      <fileset dir="./properties"/>
+    </copy>
+    <copy file="README" todir="${build.classes.dir}"/>
+
+    <mkdir dir="${build.lib.dir}"/>
+    <jar manifest="./manifest.mf" jarfile="${build.lib.dir}/${jar.name}" basedir="${build.classes.dir}">
+      <include name="i18n.properties"/>
+      <include name="i18n_ja.properties"/>
+      <include name="README"/>
+      <include name="${package.dir}/**/**"/>
+      <exclude name="${package.dir}/Main.class"/>
+    </jar>
+    <jar manifest="./launcher_manifest.mf" jarfile="${build.lib.dir}/launcher.jar" basedir="${build.classes.dir}">
+      <include name="${package.dir}/Main.class"/>
+    </jar>
+  </target>
+
+  <!-- -->
+  <target name="clean">
+    <delete dir="${build.classes.dir}/${package.dir}" verbose="false"/>
+    <delete dir="${build.src.dir}" verbose="false"/>
+    <delete file="${build.lib.dir}/${jar.name}" verbose="false"/>
+    <delete file="${build.lib.dir}/geocaching_obf.jar" verbose="false"/>
+    <delete file="${build.lib.dir}/launcher.jar" verbose="false"/>
+  </target>
+
+  <!-- -->
+  <target name="run" depends="jar">
+    <java fork="true" classpath="${build.lib.dir}/${jar.name};." classpathref="classpath" classname="${package.name}.GCOrganizer">
+      <!--<jvmarg value="-Dswing.aatext=true"/>-->
+      <jvmarg value="-ea"/>
+      <!--<jvmarg value="-Dsun.java2d.trace=log"/>-->
+      <!--<jvmarg value="-Dsun.java2d.opengl=true"/>-->
+      <!--<jvmarg value="-Dawt.nativeDoubleBuffering=true"/>-->
+      <!--<jvmarg value="-Dswing.defaultlaf=com.sun.java.swing.plaf.windows.WindowsLookAndFeel"/>-->
+      <!--<jvmarg value="-Dswing.defaultlaf=com.sun.java.swing.plaf.motif.MotifLookAndFeel"/>-->
+    </java>
+  </target>
+
+  <!-- -->
+  <target name="run_metal" depends="jar">
+    <java fork="true" classpath="${build.lib.dir}/${jar.name};." classpathref="classpath" classname="${package.name}.GCOrganizer">
+      <!--<jvmarg value="-Dswing.aatext=true"/>-->
+      <jvmarg value="-ea"/>
+      <!--<jvmarg value="-Dsun.java2d.opengl=true"/>-->
+      <!--<jvmarg value="-Dawt.nativeDoubleBuffering=true"/>-->
+    </java>
+  </target>
+
+  <!-- -->
+  <target name="obfuscate" depends="jar">
+    <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" classpath="${lib.dir}/yguard.jar"/>
+    <property name="srcDir" value="./src"/>
+    <property name="classDir" value="${build.classes.dir}"/>
+    <property name="jar" value="${jar_name}"/>
+    <property name="obfjar" value="geocaching_obf.jar"/>
+    <property name="mainclass" value="com.dolphincafe.geocaching.GCOrganizer"/>
+    <property name="renamelog" value="./build/obfuscation_renamelog.xml"/>
+    <property name="shrinklog" value="./build/obfuscation_shrinklog.xml"/>
+    <yguard>
+      <inoutpair in="${build.lib.dir}/${jar.name}" out="${build.lib.dir}/${obfjar}"/>
+      <shrink logfile="${shrinklog}">
+        <keep>
+          <class name="com.dolphincafe.geocaching.CacheBean"/>
+          <class classes="protected" methods="protected" fields="protected">
+            <patternset>
+              <include name="com.dolphincafe.geocaching.*"/>
+            </patternset>
+          </class>
+        </keep>
+      </shrink>
+      <rename mainclass="${mainclass}" logfile="${renamelog}">
+        <property name="error-checking" value="pedantic"/>
+        <keep>
+          <class name="com.dolphincafe.geocaching.CacheBean"/>
+          <class classes="protected" methods="protected" fields="protected">
+            <patternset>
+              <include name="com.dolphincafe.geocaching.*"/>
+            </patternset>
+          </class>
+        </keep>
+      </rename>
+    </yguard>
+  </target>
+</project>

@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Splashscreen-Image: com/dolphincafe/geocaching/icons/about.png
+Main-Class: com.dolphincafe.geocaching.GCOrganizer
+Class-Path: .
