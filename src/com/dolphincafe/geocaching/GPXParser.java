@@ -538,8 +538,12 @@ class GPXParser {
             bean.setType(CacheBean.TYPE_PARKING);
         } else if (type.equals("Waypoint|Reference Point")) {
             bean.setType(CacheBean.TYPE_REF_POINT);
+        } else if (type.equals("Geocache|Wherigo Cache")) {
+            bean.setType(CacheBean.TYPE_WHERIGO);
+        } else if (type.equals("Geocache|Lost and Found Event Cache")) {
+            bean.setType(CacheBean.TYPE_LOST_AND_FOUND);
         } else {
-            assert false : "Unknown type";
+            bean.setType(CacheBean.TYPE_UNSUPPORTED);
         }
     }
 

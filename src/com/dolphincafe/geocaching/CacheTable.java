@@ -1641,7 +1641,7 @@ class CacheTable extends JTable implements MouseListener {
                     setIcon(Icons.UNKNOWN_CACHE);
                 } else if (type.startsWith("Ea")) { // earth
                     setIcon(Icons.EARTH_CACHE);
-                } else if (type.startsWith("W")) { // webcam
+                } else if (type.startsWith("We")) { // webcam
                     setIcon(Icons.WEBCAM_CACHE);
                 } else if (type.startsWith("Ev")) { // evnt
                     setIcon(Icons.EVENT_CACHE);
@@ -1653,12 +1653,22 @@ class CacheTable extends JTable implements MouseListener {
                     setIcon(Icons.PROJECT_APE_CACHE);
                 } else if (type.startsWith("Le")) { // letterbox hybrid
                     setIcon(Icons.LETTERBOX_CACHE);
-                } else if (type.startsWith("Lo")) { // locationless (reverse)
+                } else if (type.startsWith("Loc")) { // locationless (reverse)
                     setIcon(Icons.LOCLESS_CACHE);
                 } else if (type.startsWith("Pa")) { // parking area
                     setIcon(Icons.PARKING);
                 } else if (type.startsWith("R")) { // reference point
                     setIcon(Icons.REF_POINT);
+                } else if (type.startsWith("Wh")) { // wherigo
+                    setIcon(Icons.WHERIGO_CACHE);
+                } else if (type.startsWith("Los")) { // lost and found
+                    if (bean.getName().startsWith("10 Years!")) { // 10th anniversary
+                        setIcon(Icons.LOST_AND_FOUND_CACHE);
+                    } else {
+                        setIcon(Icons.CLEAR); // unsupported
+                    }
+                } else {
+                    setIcon(Icons.CLEAR); // unsupported
                 }
             } else if (column == 1) {
                 if (archived) {
@@ -1945,7 +1955,6 @@ class CacheTable extends JTable implements MouseListener {
         /** */
         @Override
         public void done() {
-            System.out.println("Hello");
             if (getRowCount() != 0) {
                 packAndSort(true);
                 setRowSelectionInterval(0, 0);

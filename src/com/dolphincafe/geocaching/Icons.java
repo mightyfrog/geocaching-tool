@@ -60,6 +60,8 @@ class Icons {
     static final ImageIcon UNKNOWN_CACHE = createIcon("unknown.png"); // quiz
     static final ImageIcon VIRTUAL_CACHE = createIcon("virtual.png");
     static final ImageIcon WEBCAM_CACHE = createIcon("webcam.png");
+    static final ImageIcon WHERIGO_CACHE = createIcon("wherigo.png");
+    static final ImageIcon LOST_AND_FOUND_CACHE = createIcon("lost_and_found.png");
 
     // do not shuffle these smiley icons
     static final ImageIcon SMILEY_SMILE = createIcon("icon_smile.gif");

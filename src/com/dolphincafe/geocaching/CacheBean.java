@@ -35,6 +35,9 @@ public final class CacheBean implements Serializable {
     public static final int TYPE_LOCATIONLESS = 11;
     public static final int TYPE_PARKING = 12;
     public static final int TYPE_REF_POINT = 13;
+    public static final int TYPE_LOST_AND_FOUND = 14;
+    public static final int TYPE_WHERIGO = 15;
+    public static final int TYPE_UNSUPPORTED = 99;
 
     // status
     public static final int SYM_FOUND = 0;

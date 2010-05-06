@@ -221,8 +221,14 @@ class I18N {
         case CacheBean.TYPE_REF_POINT:
             str = "Reference Point";
             break;
+        case CacheBean.TYPE_WHERIGO:
+            str = "Wherigo Cache";
+            break;
+        case CacheBean.TYPE_LOST_AND_FOUND:
+            str = "Lost And Found";
+            break;
         default:
-            throw new IllegalArgumentException("Invalid type: " + type);
+            str = "Not Supported Yet";
         }
 
         return str;
